@@ -32,7 +32,7 @@ function convM3u8() {
     
                 fs.appendFileSync('master.m3u8', '#EXTINF:10, no desc\n');
                 fs.appendFileSync('master.m3u8', `sec_${i}.ts\n`);
-            } else if (i == 222){
+            } else if (i == 442){
                 fs.appendFileSync('master.m3u8', '#EXT-X-ENDLIST');
             } else if (i < fileCount && i != 0) {
                 fs.appendFileSync('master.m3u8', '#EXTINF:10, no desc\n');
