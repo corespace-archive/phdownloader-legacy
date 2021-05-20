@@ -2,10 +2,12 @@ const fs = require("fs");
 const { FFmpeg, ffprobe, ffprobeSync } = require("kiss-ffmpeg");
 
 function convMP4() {
+    let videoData = JSON.parse(fs.readFileSync("./data/capture.xhr"));
+    const source = videoData["title"];
     ffmpeg = new FFmpeg({
         inputs: "downloads/master.m3u8",
         outputs:  { 
-            url: "file.mp4",
+            url: source + ".mp4",
             options: { 
                 "vcodec": "copy", 
                 "c": "copy",
@@ -19,7 +21,8 @@ function convMP4() {
 function convM3u8() {
     const testFolder = './downloads/';
     fs.readdir(testFolder, (err, files) => {
-        const fileCount = (( files.length + 1 ));
+        const fileCount = (( files.length ));
+        console.log(fileCount);
         for (let i = 1; i < fileCount; i++) {
             
             console.log(`i[${i}] - f[${fileCount}]`);
@@ -32,7 +35,7 @@ function convM3u8() {
     
                 fs.appendFileSync('master.m3u8', '#EXTINF:10, no desc\n');
                 fs.appendFileSync('master.m3u8', `sec_${i}.ts\n`);
-            } else if (i == 442){
+            } else if (i == (( fileCount - 1 ))){
                 fs.appendFileSync('master.m3u8', '#EXT-X-ENDLIST');
             } else if (i < fileCount && i != 0) {
                 fs.appendFileSync('master.m3u8', '#EXTINF:10, no desc\n');

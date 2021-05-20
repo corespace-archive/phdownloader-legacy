@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "fs-extra": "^10.0.0",
+    "kiss-ffmpeg": "^0.4.2",
+    "node-fetch": "^2.6.1",
+    "puppeteer": "^9.1.1"
+  }
+}
