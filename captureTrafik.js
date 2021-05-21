@@ -1,6 +1,14 @@
 const puppeteer = require("puppeteer");
 const fs = require('fs');
+const fsExtra = require("fs-extra");
 const fsp = require('fs').promises;
+
+function cleanUP(directory) {
+    fsExtra.emptyDirSync(directory);
+    if (fs.existsSync("master.m3u8")) {
+        fs.unlinkSync("master.m3u8");
+    }
+}
 
 fs.writeFileSync('./data/capture.xhr', "",{encoding:'utf8',flag:'w'});
 
@@ -9,7 +17,7 @@ async function getData() {
     return getData;
 }
 
-async function test() {
+async function captureTraffic() {
         const browser = await puppeteer.launch({
             headless: false,
             product: 'brave',
@@ -27,9 +35,9 @@ async function test() {
             await page.goto('https://de.pornhubpremium.com/premium/login', {waitUntil: 'load', timeout: 0});
         
             await page.click("#username", {delay: 100});
-            await page.type("#username", "USERNAME", {delay: 100});
+            await page.type("#username", "asp3x", {delay: 100});
             await page.click("#password");
-            await page.type("#password", "PASSWORD", {delay: 100});
+            await page.type("#password", "dgbw8nyvXZvLQTzQMiAZo5L2y6eJbmFCBQtPMP5H", {delay: 100});
             await page.click('#submitLogin'); 
             await page.waitForNavigation(); 
     
@@ -37,7 +45,20 @@ async function test() {
             await fsp.writeFile('./data/cookies.json', JSON.stringify(cookies, null, 2));
         }
 
-        await page.goto('VIDEOURL', {waitUntil: 'load', timeout: 0});
+
+        // var myArgs = process.argv.slice(2)[0];
+        // if (myArgs[0]) {
+        //     let videoURL = myArgs[0];
+        // } else {
+        //     let videoURL = 'https://de.pornhubpremium.com/view_video.php?viewkey=ph5f350400af944';
+        // }
+        
+        if (!process.argv.slice(2)[0]) {
+            console.log("No URL provided"); 
+            return;
+        }
+
+        await page.goto(process.argv.slice(2)[0], {waitUntil: 'load', timeout: 0});
 
         let videoTitle = await page.evaluate(() => {
             let videoTitleElement = document.getElementById("videoTitle").children[1];
@@ -47,10 +68,10 @@ async function test() {
         });
 
         await page.evaluateHandle(() => {
-            document.getElementsByTagName("video")[0].currentTime = ((document.getElementsByTagName("video")[0].duration) - 10);
+            document.getElementsByTagName("video")[0].currentTime = ((document.getElementsByTagName("video")[0].duration) - 20);
 
             const storageHolder = document.createElement('a');
-            storageHolder.innerHTML = document.getElementsByTagName("video")[0].duration;
+            storageHolder.innerHTML = ((document.getElementsByTagName("video")[0].duration) + 10);
             storageHolder.setAttribute("id", "stHolder");
             document.body.appendChild(storageHolder);
         });
@@ -79,4 +100,5 @@ async function test() {
         setTimeout(function(){ browser.close(); }, inner_html);
 }
 
-test();
+cleanUP("downloads");
+captureTraffic();

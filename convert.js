@@ -2,12 +2,16 @@ const fs = require("fs");
 const { FFmpeg, ffprobe, ffprobeSync } = require("kiss-ffmpeg");
 
 function convMP4() {
+    if (!fs.existsSync("./videos")) {
+        fs.mkdirSync("./videos");
+    }
+
     let videoData = JSON.parse(fs.readFileSync("./data/capture.xhr"));
     const source = videoData["title"];
     ffmpeg = new FFmpeg({
         inputs: "downloads/master.m3u8",
         outputs:  { 
-            url: source + ".mp4",
+            url: "videos/" + source + ".mp4",
             options: { 
                 "vcodec": "copy", 
                 "c": "copy",
