@@ -2,10 +2,6 @@ const fs = require("fs");
 const { FFmpeg, ffprobe, ffprobeSync } = require("kiss-ffmpeg");
 
 function convMP4() {
-    if (!fs.existsSync("./videos")) {
-        fs.mkdirSync("./videos");
-    }
-
     let videoData = JSON.parse(fs.readFileSync("./data/capture.xhr"));
     const source = videoData["title"];
     ffmpeg = new FFmpeg({
@@ -58,3 +54,5 @@ function convM3u8() {
 }
 
 convM3u8();
+
+// module.exports.convM3u8 = convM3u8;

@@ -17,6 +17,7 @@ function printProgress(mix, max){
 }
 
 async function downloadVideo() {
+    cleanUP("downloads");
     let videoData = JSON.parse(fs.readFileSync("./data/capture.xhr"));
     const source = videoData["url"];
     console.log(source);
@@ -60,9 +61,14 @@ async function downloadVideo() {
             response.pipe(file);
         });
         printProgress(i, maxCount);
+        if (i == maxCount) {
+            return true;
+        }
     }
     // console.log(maxCount);
 }
 
-cleanUP("downloads");
+// cleanUP("downloads");
 downloadVideo();
+
+// module.exports.downloadVideo = downloadVideo;
